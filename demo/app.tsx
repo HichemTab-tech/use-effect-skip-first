@@ -1,15 +1,22 @@
 import * as React from 'react';
-//import {GiveHichemTabTechCredit, MyComponent} from '../dist/main.js'; // Import your built library
-import {GiveHichemTabTechCredit, MyComponent} from 'use-effect-skip-first'; // Import your dev library
+import { useState } from "react";
+import {useEffectSkipFirst} from 'use-effect-skip-first';
 
 const App = () => {
 
-    GiveHichemTabTechCredit();
+    const [counter, setCounter] = useState(0);
+
+    useEffectSkipFirst(() => {
+        console.log("effect called", counter);
+    }, [counter]);
 
     return (
         <div>
             <h1 className="text-red-600">use-effect-skip-first Demo</h1>
-            <MyComponent/>
+            <button onClick={() => setCounter(counter + 1)}>
+                Click me
+            </button>
+            <p>Counter: {counter}</p>
         </div>
     );
 };
