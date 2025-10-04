@@ -3,7 +3,7 @@
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "%PACKAGE-NAME%": ["../src"]
+      "use-effect-skip-first": ["../src"]
     },
     "rootDir": "../"
   },
