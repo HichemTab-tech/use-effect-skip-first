@@ -1,121 +1,51 @@
 # use-effect-skip-first
 
-*A short but clear description of your package. Explain what it does, why it’s useful, and in what context it should be used.*
+Skip the first run of a React `useEffect`—handy for ignoring the initial mount and only reacting to subsequent dependency changes.
 
 ---
 
-## 🚀 Getting Started
+## Install
 
-Start by installing the package via your preferred package manager:
-
-```sh
-npm install use-effect-skip-first
-```
-
-or, if using pnpm:
-
-```sh
+```bash
 pnpm add use-effect-skip-first
-```
-
----
-
-## ☕ 60-Second TL;DR
-
-Show a minimal but practical example that someone can copy-paste to immediately see results:
-
-```javascript
-import { exampleFunction } from 'use-effect-skip-first';
-
-export default function Demo() {
-  const result = exampleFunction('Hello');
-  return <div>{result}</div>;
-}
+# or
+npm i use-effect-skip-first
 ```
 
 ## Usage
 
-Provide a more detailed usage example:
+```tsx
+import * as React from "react";
+import { useState } from "react";
+import { useEffectSkipFirst } from "use-effect-skip-first";
 
-```javascript
-import { exampleFunction } from 'use-effect-skip-first';
+export default function App() {
+  const [counter, setCounter] = useState(0);
 
-function Example() {
-  // Default behavior
-  const output = exampleFunction({ name: 'Alice' });
-
-  // With a custom identifier
-  const custom = exampleFunction(42, 'myKey');
+  useEffectSkipFirst(() => {
+    console.log("effect called", counter);
+  }, [counter]);
 
   return (
     <div>
-      <p>{output}</p>
-      <p>{custom}</p>
+      <h1>use-effect-skip-first Demo</h1>
+      <button onClick={() => setCounter(counter + 1)}>Click me</button>
+      <p>Counter: {counter}</p>
     </div>
   );
 }
 ```
 
----
+## API
 
-## API Reference
-
-### Function `exampleFunction(args)`
-
-Description of what this function/method does and how to use it.
-
-**Parameters:**
-
-| Parameter   | Type   | Description                        |
-|-------------|--------|------------------------------------|
-| `args`      | any    | Description of the arguments.      |
-
-**Returns:**
-
-- Type: `any`
-Briefly describe the returned value or output.
-
-**Example:**
-
-```javascript
-import { exampleFunction } from 'use-effect-skip-first';
-
-const result = exampleFunction('Hello, world!');
-console.log(result);
+```ts
+useEffectSkipFirst(effect: EffectCallback, deps?: DependencyList): void;
 ```
 
----
+* Skips the effect on the initial render **when you provide a non-empty `deps` array**.
+* On later updates (when any dep changes), your `effect` runs as usual.
 
-## 🤝 Contributions
+## Notes
 
-Contributions are welcome! Feel free to:
-
-1. Fork the repository
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-Please follow existing coding styles and clearly state your changes in the pull request.
-
-## ❓ FAQ
-
-**Question 1**
-Answer.
-
-**Question 2**
-Answer.
-
-## Issues
-
-If you encounter any issue, please open an issue [here](https://github.com/HichemTab-tech/use-effect-skip-first/issues).
-
-## License
-
-Distributed under the MIT License. See [`LICENSE`](LICENSE) file for more details.
-
-&copy; 2025 [Hichem Taboukouyout](mailto:hichem.taboukouyout@hichemtab-tech.me)
-
----
-
-_If you found this package helpful, consider leaving a star! ⭐️_
+* If `deps` is **empty or omitted**, the effect behaves like a normal `useEffect` (it will run on mount).
+* Return a cleanup function from `effect` if needed—identical to the standard `useEffect` API.
